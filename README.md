@@ -95,15 +95,22 @@ When enabled in **Settings > Display Options**, runtime logs and system timezone
 App Screens 😅
 
 Dark Mode
+
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/faee9e5f-3d7b-445c-8488-8872d8f94357" />
 <img width="400" height="620" alt="image" src="https://github.com/user-attachments/assets/e255bac7-2028-43dc-9d29-8f8cd2886f2e" />
 Light
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/9b0d4e35-fe1f-4565-8cb1-064c2ef6c02c" />
+
 Cyberpunk 🤯
+
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/c605be19-7139-4399-b2e3-eba91c3f7c99" />
+
 Nord
+
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/eafff717-cd51-4da3-aab1-09c3f759a2e3" />
+
 Win95 🤓
+
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/25c48837-a7a4-47ce-adab-bc39a92e9276" />
 
 ---
