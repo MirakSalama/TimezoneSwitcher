@@ -97,8 +97,12 @@ App Screens 😅
 Dark Mode
 
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/faee9e5f-3d7b-445c-8488-8872d8f94357" />
+Settings window
+
 <img width="400" height="620" alt="image" src="https://github.com/user-attachments/assets/e255bac7-2028-43dc-9d29-8f8cd2886f2e" />
+
 Light
+
 <img width="500" height="700" alt="image" src="https://github.com/user-attachments/assets/9b0d4e35-fe1f-4565-8cb1-064c2ef6c02c" />
 
 Cyberpunk 🤯
