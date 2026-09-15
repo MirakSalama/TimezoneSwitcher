@@ -1,4 +1,3 @@
-# Build-TimezoneSwitcher.ps1
 $ProjectName = "TimezoneSwitcher"
 $TargetDir = Join-Path -Path $PSScriptRoot -ChildPath $ProjectName
 
@@ -992,7 +991,7 @@ $SettingsWindowXamlContent = @"
                                 <TextBlock Text="Window Opacity" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" VerticalAlignment="Center"/>
                                 <TextBlock x:Name="TxtOpacityValue" Text="80%" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
-                            <Slider x:Name="SldOpacity" Minimum="0.10" Maximum="1.0" SmallChange="0.1" LargeChange="0.1" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="SldOpacity_ValueChanged" Cursor="Hand"/>
+                            <Slider x:Name="SldOpacity" Minimum="0.10" Maximum="1.0" Value="0.80" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" IsSnapToTickEnabled="True" ValueChanged="SldOpacity_ValueChanged" Cursor="Hand"/>
                         </StackPanel>
                     </GroupBox>
 
@@ -1032,6 +1031,7 @@ namespace $ProjectName
     public partial class SettingsWindow : Window
     {
         private readonly MainWindow _main;
+        private bool _isInitializing = true;
 
         public SettingsWindow(MainWindow main)
         {
@@ -1049,6 +1049,8 @@ namespace $ProjectName
             TxtOpacityValue.Text = $"{(int)(App.WindowOpacityLevel * 100)}%";
 
             SelectActiveThemeRadio(App.CurrentTheme);
+
+            _isInitializing = false;
         }
 
         private void SelectActiveThemeRadio(string theme)
@@ -1065,15 +1067,16 @@ namespace $ProjectName
 
         private void SldOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (TxtOpacityValue == null) return;
-            double opacityVal = Math.Round(e.NewValue, 1);
+            if (_isInitializing || TxtOpacityValue == null) return;
+
+            double opacityVal = Math.Round(e.NewValue, 2);
             TxtOpacityValue.Text = $"{(int)(opacityVal * 100)}%";
             App.SetWindowOpacity(opacityVal);
         }
 
         private void Theme_Checked(object sender, RoutedEventArgs e)
         {
-            if (_main == null) return;
+            if (_isInitializing || _main == null) return;
             if (sender is RadioButton rb && rb.Tag is string themeName)
             {
                 App.SetTheme(themeName);
@@ -1082,6 +1085,7 @@ namespace $ProjectName
 
         private void CmbFontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isInitializing) return;
             if (_main != null && CmbFontFamily.SelectedItem is FontFamily fontFamily)
             {
                 _main.FontFamily = fontFamily;
@@ -1091,7 +1095,7 @@ namespace $ProjectName
 
         private void DisplayOption_Changed(object sender, RoutedEventArgs e)
         {
-            if (_main == null) return;
+            if (_isInitializing || _main == null) return;
             _main.ShowSeconds = ChkShowSeconds.IsChecked ?? false;
             _main.ShowDayOfWeek = ChkShowDayOfWeek.IsChecked ?? false;
             _main.UpdateLiveTimes();
@@ -1099,6 +1103,7 @@ namespace $ProjectName
 
         private void ChkEnableLogging_Changed(object sender, RoutedEventArgs e)
         {
+            if (_isInitializing) return;
             App.IsLoggingEnabled = ChkEnableLogging.IsChecked ?? false;
             App.Log($"Logging state changed to: {App.IsLoggingEnabled}");
         }
