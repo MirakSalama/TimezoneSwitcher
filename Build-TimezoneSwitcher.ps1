@@ -351,11 +351,11 @@ $MainWindowXamlContent = @"
                         <TextBlock Text="QUICK SWITCH" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}" Margin="2,0,0,6"/>
                         <Grid Margin="2,0,2,4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="95"/>
+                                <ColumnDefinition Width="140"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="95"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="ZONE" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}"/>
+                            <TextBlock Grid.Column="0" Text="ZONE / CITY" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}"/>
                             <TextBlock Grid.Column="1" Text="LIVE TIME" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="2" Text="CONVERTED" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource MutedTextBrush}" HorizontalAlignment="Right"/>
                         </Grid>
@@ -388,15 +388,18 @@ $MainWindowXamlContent = @"
 
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="85"/>
+                                                <ColumnDefinition Width="135"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="85"/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Grid.Column="0" Content="{Binding ZoneLabel}" 
-                                                    Click="BtnSwitchZone_Click" Tag="{Binding ZoneId}"
-                                                    Background="{DynamicResource InputBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" FontSize="11"
-                                                    BorderThickness="0" Padding="6,4" HorizontalAlignment="Left" Width="80" Cursor="Hand"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding LiveTime}" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button Content="{Binding ZoneLabel}" 
+                                                        Click="BtnSwitchZone_Click" Tag="{Binding ZoneId}"
+                                                        Background="{DynamicResource InputBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" FontSize="11"
+                                                        BorderThickness="0" Padding="6,4" HorizontalAlignment="Left" Width="80" Cursor="Hand"/>
+                                                <TextBlock Text="{Binding CityName}" FontSize="11" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="{Binding LiveTime}" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                             <TextBlock Grid.Column="2" Text="{Binding ConvertedTime}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                                         </Grid>
                                     </Border>
@@ -489,6 +492,7 @@ namespace $ProjectName
     public class QuickZoneItem : INotifyPropertyChanged
     {
         public string ZoneLabel { get; set; } = string.Empty;
+        public string CityName { get; set; } = string.Empty;
         public string ZoneId { get; set; } = string.Empty;
 
         private string _liveTime = string.Empty;
@@ -528,8 +532,8 @@ namespace $ProjectName
         private readonly Random _rand = new Random();
 
         public ObservableCollection<QuickZoneItem> QuickZones { get; set; } = new ObservableCollection<QuickZoneItem>();
-        public bool ShowSeconds { get; set; } = false;
-        public bool ShowDayOfWeek { get; set; } = false;
+        public bool ShowSeconds { get; set; } = true;
+        public bool ShowDayOfWeek { get; set; } = true;
 
         public MainWindow()
         {
@@ -576,11 +580,11 @@ namespace $ProjectName
 
         private void InitQuickZones()
         {
-            QuickZones.Add(new QuickZoneItem { ZoneLabel = "EEST", ZoneId = "E. Europe Standard Time" });
-            QuickZones.Add(new QuickZoneItem { ZoneLabel = "EST / EDT", ZoneId = "Eastern Standard Time" });
-            QuickZones.Add(new QuickZoneItem { ZoneLabel = "CST / CDT", ZoneId = "Central Standard Time" });
-            QuickZones.Add(new QuickZoneItem { ZoneLabel = "MST / MDT", ZoneId = "Mountain Standard Time" });
-            QuickZones.Add(new QuickZoneItem { ZoneLabel = "PST / PDT", ZoneId = "Pacific Standard Time" });
+            QuickZones.Add(new QuickZoneItem { ZoneLabel = "EEST", CityName = "Cairo", ZoneId = "E. Europe Standard Time" });
+            QuickZones.Add(new QuickZoneItem { ZoneLabel = "EST / EDT", CityName = "New York", ZoneId = "Eastern Standard Time" });
+            QuickZones.Add(new QuickZoneItem { ZoneLabel = "CST / CDT", CityName = "Chicago", ZoneId = "Central Standard Time" });
+            QuickZones.Add(new QuickZoneItem { ZoneLabel = "MST / MDT", CityName = "Denver", ZoneId = "Mountain Standard Time" });
+            QuickZones.Add(new QuickZoneItem { ZoneLabel = "PST / PDT", CityName = "Los Angeles", ZoneId = "Pacific Standard Time" });
 
             LstQuickSwitch.ItemsSource = QuickZones;
         }
@@ -651,7 +655,6 @@ namespace $ProjectName
 
         private void StartBreathingGlow()
         {
-            // Fast Opacity Pulse
             DoubleAnimation orb1Opacity = new DoubleAnimation
             {
                 From = 0.25, To = 0.65,
@@ -665,7 +668,6 @@ namespace $ProjectName
                 AutoReverse = true, RepeatBehavior = RepeatBehavior.Forever
             };
 
-            // Fast Scaling
             DoubleAnimation orb1Scale = new DoubleAnimation
             {
                 From = 0.8, To = 1.3,
@@ -679,7 +681,6 @@ namespace $ProjectName
                 AutoReverse = true, RepeatBehavior = RepeatBehavior.Forever
             };
 
-            // Movement Drift
             DoubleAnimation orb1TranslateX = new DoubleAnimation
             {
                 From = -30, To = 40,
@@ -760,7 +761,6 @@ namespace $ProjectName
                 Canvas.SetTop(p.Element, p.Y);
             }
 
-            // Remove existing lines
             foreach (var line in _connectionLines)
             {
                 ParticleCanvas.Children.Remove(line);
@@ -771,7 +771,6 @@ namespace $ProjectName
                 ? (Color)ColorConverter.ConvertFromString("#FF007F")
                 : (Color)ColorConverter.ConvertFromString("#88C0D0");
 
-            // Draw network connections between dots within distance threshold
             double maxDistance = 85.0;
             for (int i = 0; i < _particles.Count; i++)
             {
@@ -812,19 +811,25 @@ namespace $ProjectName
             TxtCurrentZoneBanner.Text = TimeZoneInfo.Local.DisplayName;
             DateTime utcNow = DateTime.UtcNow;
 
-            string format = "hh:mm";
-            if (ShowSeconds) format += ":ss";
-            format += " tt";
-
             foreach (var item in QuickZones)
             {
                 try
                 {
                     TimeZoneInfo info = TimeZoneInfo.FindSystemTimeZoneById(item.ZoneId);
                     DateTime zoneTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, info);
-                    string formatted = zoneTime.ToString(format);
-                    if (ShowDayOfWeek) formatted = $"{zoneTime.ToString("ddd")} {formatted}";
-                    item.LiveTime = formatted;
+
+                    string timeFormat = ShowSeconds ? "hh:mm:ss" : "hh:mm";
+                    string formattedTime = zoneTime.ToString(timeFormat);
+                    string amPm = zoneTime.ToString("tt").ToLower().Substring(0, 1);
+
+                    string result = string.Empty;
+                    if (ShowDayOfWeek)
+                    {
+                        result += $"{zoneTime.ToString("ddd")} ";
+                    }
+                    result += $"{formattedTime} {amPm}";
+
+                    item.LiveTime = result;
                 }
                 catch (Exception ex)
                 {
@@ -907,7 +912,8 @@ namespace $ProjectName
                 {
                     TimeZoneInfo targetZone = TimeZoneInfo.FindSystemTimeZoneById(item.ZoneId);
                     DateTime converted = TimeZoneInfo.ConvertTime(sourceDateTime, selectedSourceZone, targetZone);
-                    item.ConvertedTime = converted.ToString("hh:mm tt");
+                    string amPm = converted.ToString("tt").ToLower().Substring(0, 1);
+                    item.ConvertedTime = $"{converted:hh:mm} {amPm}";
                 }
                 catch
                 {
